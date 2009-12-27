@@ -3,7 +3,7 @@
 /* 
 Plugin Name: ChromeFrame-For-Wordpress
 Plugin URI: http://sardiusgroup.com/chromeframe-for-wordpress
-Version: 0.1
+Version: 0.1.001
 Author: Andrew Janssen, for The Sardius Group LLC
 Description: Displays a ChromeFrame notice if the user is running IE6 or 7. Prompts the user to either upgrade to IE8, install ChromeFrame, or install another browser.
 */
