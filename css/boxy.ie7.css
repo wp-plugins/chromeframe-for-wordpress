@@ -1,0 +1,10 @@
+.boxy-wrapper .top-left,
+.boxy-wrapper .top-right,
+.boxy-wrapper .bottom-right,
+.boxy-wrapper .bottom-left {
+	width: 10px;
+	background: black !important;
+	opacity: 0.6;
+	filter: alpha(opacity=60);
+	padding: 0;
+}
