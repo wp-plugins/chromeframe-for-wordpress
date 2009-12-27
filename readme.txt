@@ -6,7 +6,6 @@ Stable tag: trunk
 Contributors: the_curator
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=10763373
 
-
 Displays a modal notice to users of IE6 and IE7, requesting that they either upgrade to IE8, install Chrome Frame, or install another browser.
 
 == Description ==
@@ -20,6 +19,10 @@ http://sardiusgroup.com/wp-content/uploads/2009/12/screenshot-of-chromeframe-for
 == Installation ==
 
 Just download and activate. This plugin cannot be configured.
+
+== Changelog == 
+
+Dec 27: Version 0.2.00. You can now configure the plugin to block only certain versions of IE. You can also change the message displayed to the user.
 
 == Credits ==
 
