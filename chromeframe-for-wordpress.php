@@ -3,7 +3,7 @@
 /* 
 Plugin Name: ChromeFrame-For-Wordpress
 Plugin URI: http://sardiusgroup.com/chromeframe-for-wordpress
-Version: 0.2.000
+Version: 0.2.001
 Author: Andrew Janssen, for The Sardius Group LLC
 Description: Displays a ChromeFrame notice if the user is running IE6 or 7. Prompts the user to either upgrade to IE8, install ChromeFrame, or install another browser.
 */
@@ -16,15 +16,24 @@ $options_page_title = 'ChromeFrame-For-Wordpress Options';
 $html_option_name = 'chromeframe-for-wordpress-message-html';
 $enabled_option_name = 'chromeframe-for-wordpress-enabled';
 $versions_option_name = 'chromeframe-for-wordpress-ie-versions';
-$default_message_html = "<p>Sorry, your browser is out of date and doesn't support<br/>modern Web pages like " . bloginfo('name') . '. ' .
-"Please <a href=\"http://www.microsoft.com/windows/internet-explorer/worldwide-sites.aspx\">upgrade</a> " .
-"your browser to<br/>version 8 or install <a href=\"http://code.google.com/chrome/chromeframe/\">this browser enhancement</a> before continuing." .
-" Thank you!</p><p><a href=\"http://www.mozilla.com/en-US/firefox/firefox.html\">Mozilla FireFox</a>, <a href=\"http://www.google.com/chrome\">Google Chrome</a>, <a href=\"http://www.opera.com/browser/\">Opera</a>," .
-" and <a href=\"http://www.apple.com/safari/download/\">Apple Safari</a> are great options too.</p>";
 
-add_option($html_option_name, $default_message_html);
-add_option($enabled_option_name, true);
-add_option($versions_option_name, array('5', '6', '7'));
+function cf_activate() {
+	$default_message_html = "<p>Sorry, your browser is out of date and doesn't support<br/>modern Web pages like " . bloginfo('name') . '. ' .
+	"Please <a href=\"http://www.microsoft.com/windows/internet-explorer/worldwide-sites.aspx\">upgrade</a> " .
+	"your browser to<br/>version 8 or install <a href=\"http://code.google.com/chrome/chromeframe/\">this browser enhancement</a> before continuing." .
+	" Thank you!</p><p><a href=\"http://www.mozilla.com/en-US/firefox/firefox.html\">Mozilla FireFox</a>, <a href=\"http://www.google.com/chrome\">Google Chrome</a>, <a href=\"http://www.opera.com/browser/\">Opera</a>," .
+	" and <a href=\"http://www.apple.com/safari/download/\">Apple Safari</a> are great options too.</p>";
+
+	add_option($html_option_name, $default_message_html);
+	add_option($enabled_option_name, true);
+	add_option($versions_option_name, array('5', '6', '7'));	
+}
+
+function cf_uninstall() {
+	delete_option($html_option_name);
+	delete_option($enabled_option_name);
+	delete_option($versions_option_name);
+}
 
 function cf_header_content() {
 	echo '<script src="' .
@@ -213,5 +222,6 @@ function cf_add_action_link( $links, $file ) {
 add_action('wp_head', 'cf_header_content');
 add_action('admin_menu', 'cf_plugin_menu');
 add_filter('plugin_action_links', 'cf_add_action_link', 10, 2 );
-
+register_activation_hook(__FILE__, 'cf_activate');
+register_uninstall_hook(__FILE__, 'cf_uninstall');
 ?>
