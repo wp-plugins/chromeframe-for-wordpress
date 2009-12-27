@@ -1,11 +1,20 @@
 === ChromeFrame-For-Wordpress ===
 Tags: chrome,chromeframe
+Requires at least: 2.8
+Tested up to: 2.9
+Stable tag: trunk
+Contributors: the_curator
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=10763373
 
-Tired of pandering to IE6 and IE7? ChromeFrame-For-Wordpress displays a modal notice to users of IE6 and IE7, requesting that they either upgrade to IE8, install Chrome Frame, or install another browser.
+Displays a modal notice to users of IE6 and IE7, requesting that they either upgrade to IE8, install Chrome Frame, or install another browser.
 
 == Description ==
 
 Tired of pandering to IE6 and IE7? ChromeFrame-For-Wordpress displays a modal notice to users of IE6 and IE7, requesting that they either upgrade to IE8, install Chrome Frame, or install another browser.
+
+== Installation ==
+
+Just download and activate. This plugin cannot be configured.
 
 == Credits ==
 
