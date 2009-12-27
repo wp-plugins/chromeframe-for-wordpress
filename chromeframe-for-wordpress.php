@@ -43,7 +43,7 @@ function cf_header_content() {
 		var version = getInternetExplorerVersion();
 		if (version < 8) {
 			new Boxy("<p>Sorry, your browser (Internet Explorer " + 
-				version + ") is out of date and doesn't support<br/>modern Web pages like sardiusgroup.com. " +
+				version + ") is out of date and doesn't support<br/>modern Web pages like <?php bloginfo('name'); ?>. " +
 				"Please <a href=\"http://www.microsoft.com/windows/internet-explorer/worldwide-sites.aspx\">upgrade</a> " +
 				"your browser to<br/>version 8 or install <a href=\"http://code.google.com/chrome/chromeframe/\">this browser enhancement</a> before continuing." +
 				" Thank you!</p><p><a href=\"http://www.mozilla.com/en-US/firefox/firefox.html\">Mozilla FireFox</a>, <a href=\"http://www.google.com/chrome\">Google Chrome</a>, <a href=\"http://www.opera.com/browser/\">Opera</a>," +

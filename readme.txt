@@ -6,11 +6,16 @@ Stable tag: trunk
 Contributors: the_curator
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=10763373
 
+
 Displays a modal notice to users of IE6 and IE7, requesting that they either upgrade to IE8, install Chrome Frame, or install another browser.
 
 == Description ==
 
 Tired of pandering to IE6 and IE7? ChromeFrame-For-Wordpress displays a modal notice to users of IE6 and IE7, requesting that they either upgrade to IE8, install Chrome Frame, or install another browser.
+
+== Screenshots ==
+
+http://sardiusgroup.com/wp-content/uploads/2009/12/screenshot-of-chromeframe-for-wordpress.png
 
 == Installation ==
 
