@@ -17,7 +17,7 @@ $html_option_name = 'chromeframe-for-wordpress-message-html';
 $enabled_option_name = 'chromeframe-for-wordpress-enabled';
 $versions_option_name = 'chromeframe-for-wordpress-ie-versions';
 
-function cf_activate() {
+function cf_install() {
 	$default_message_html = "<p>Sorry, your browser is out of date and doesn't support<br/>modern Web pages like " . bloginfo('name') . '. ' .
 	"Please <a href=\"http://www.microsoft.com/windows/internet-explorer/worldwide-sites.aspx\">upgrade</a> " .
 	"your browser to<br/>version 8 or install <a href=\"http://code.google.com/chrome/chromeframe/\">this browser enhancement</a> before continuing." .
@@ -147,10 +147,10 @@ function cf_options_page() {
 								$enabled = $versions = $message_html = '';
 								$enabled = get_option($enabled_option_name);
 								$versions = get_option($versions_option_name);
-								$ie5_checked = in_array('5', $versions) ? 'checked' : '';
-								$ie6_checked = in_array('6', $versions) ? 'checked' : '';
-								$ie7_checked = in_array('7', $versions) ? 'checked' : '';
-								$ie8_checked = in_array('8', $versions) ? 'checked' : '';
+								$ie5_checked = in_array('5', $versions) ? '' : 'checked';
+								$ie6_checked = in_array('6', $versions) ? '' : 'checked';
+								$ie7_checked = in_array('7', $versions) ? '' : 'checked';
+								$ie8_checked = in_array('8', $versions) ? '' : 'checked';
 								$message_html = get_option($html_option_name);
 								$enabled_input_value = $enabled ? 'checked' : '';
 								
@@ -222,6 +222,6 @@ function cf_add_action_link( $links, $file ) {
 add_action('wp_head', 'cf_header_content');
 add_action('admin_menu', 'cf_plugin_menu');
 add_filter('plugin_action_links', 'cf_add_action_link', 10, 2 );
-register_activation_hook(__FILE__, 'cf_activate');
+register_uninstall_hook(__FILE__, 'cf_install');
 register_uninstall_hook(__FILE__, 'cf_uninstall');
 ?>

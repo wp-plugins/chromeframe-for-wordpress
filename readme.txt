@@ -22,7 +22,11 @@ Just download and activate. This plugin cannot be configured.
 
 == Changelog == 
 
-Dec 27: Version 0.2.00. You can now configure the plugin to block only certain versions of IE. You can also change the message displayed to the user.
+2009 Jan 19: Version 0.2.002. BUGFIX: the checkboxes to block/allow speific versions of IE were backwards. "block" actually allowed.
+
+Dec 27: Version 0.2.001. BUGFIX: on some webservers, plugin leaked the blog title before the WordPress loop started. Added an uninstall function.
+
+Dec 27: Version 0.2.000. You can now configure the plugin to block only certain versions of IE. You can also change the message displayed to the user.
 
 == Credits ==
 
