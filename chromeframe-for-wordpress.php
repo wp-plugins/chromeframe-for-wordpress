@@ -3,7 +3,7 @@
 /* 
 Plugin Name: ChromeFrame-For-Wordpress
 Plugin URI: http://sardiusgroup.com/chromeframe-for-wordpress
-Version: 0.2.001
+Version: 0.2.003
 Author: Andrew Janssen, for The Sardius Group LLC
 Description: Displays a ChromeFrame notice if the user is running IE6 or 7. Prompts the user to either upgrade to IE8, install ChromeFrame, or install another browser.
 */
@@ -36,7 +36,10 @@ function cf_uninstall() {
 }
 
 function cf_header_content() {
-	echo '<script src="' .
+	global $enabled_option_name;
+	
+	if (get_option($enabled_option_name) == true) {
+	echo '<script type="text/javascript" src="' .
 		get_bloginfo('wpurl') . '/wp-content/plugins/chromeframe-for-wordpress/js/jquery-1.3.2.min.js" type="text/javascript"></script>';
 	echo '<script src="' .
 		get_bloginfo('wpurl') . '/wp-content/plugins/chromeframe-for-wordpress/js/boxy-0.1.4/src/javascripts/jquery.boxy.js" type="text/javascript"></script>';
@@ -45,7 +48,7 @@ function cf_header_content() {
 	echo '	<link rel="stylesheet" href="' .
 		get_bloginfo('wpurl') . '/wp-content/plugins/chromeframe-for-wordpress/js/boxy-0.1.4/src/stylesheets/boxy.ie7.css" />';
 	echo '<![endif]-->';
-	
+	}
 ?>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"> </script>
 <script>
@@ -68,7 +71,7 @@ function cf_header_content() {
 		
 	var onIE = function() {
 		var version = getInternetExplorerVersion();
-		var allowedVersions = [<?php
+		var blockedVersions = [<?php
 			$is_first = true;
 			foreach(get_option('chromeframe-for-wordpress-ie-versions') as $version) {
 				if ($is_first == false) {
@@ -78,10 +81,10 @@ function cf_header_content() {
 				$is_first = false;
 			}
 ?>];
-		var ieAllowed = false;
-		for(i=0;i<allowedVersions.length;i++){
-	      if(allowedVersions[i] == version){
-	        ieAllowed = true;
+		var ieAllowed = true;
+		for(i=0;i<blockedVersions.length;i++){
+	      if(blockedVersions[i] == version){
+	        ieAllowed = false;
 	      }
 	    }
 		if (!ieAllowed) {
@@ -91,11 +94,12 @@ echo '"' . str_replace('"', '\"', get_option('chromeframe-for-wordpress-message-
 				closeable: false,
 				modal: true
 			} );
+			// CFInstall.check({});
 		}
 	};
- CFInstall.check({
-    onmissing: onIE
-  });
+	if (getInternetExplorerVersion() != -1) {
+		onIE();
+	}
 });
 </script>
 
@@ -147,10 +151,10 @@ function cf_options_page() {
 								$enabled = $versions = $message_html = '';
 								$enabled = get_option($enabled_option_name);
 								$versions = get_option($versions_option_name);
-								$ie5_checked = in_array('5', $versions) ? '' : 'checked';
-								$ie6_checked = in_array('6', $versions) ? '' : 'checked';
-								$ie7_checked = in_array('7', $versions) ? '' : 'checked';
-								$ie8_checked = in_array('8', $versions) ? '' : 'checked';
+								$ie5_checked = in_array('5', $versions) ? 'checked' : '';
+								$ie6_checked = in_array('6', $versions) ? 'checked' : '';
+								$ie7_checked = in_array('7', $versions) ? 'checked' : '';
+								$ie8_checked = in_array('8', $versions) ? 'checked' : '';
 								$message_html = get_option($html_option_name);
 								$enabled_input_value = $enabled ? 'checked' : '';
 								
@@ -172,7 +176,7 @@ function cf_options_page() {
 								$rows[] = array(
 										'id' => $versions_option_name,
 										'label' => 'Block These IE Versions',
-										'desc' => 'Pick which versions of Internet Explorer to disallow.',
+										'desc' => 'Pick which versions of Internet Explorer to block.',
 										'content' => "
 										<ul>
 										<li><label for='$plugin_id-ie8'><input type='checkbox' name='$versions_option_name_with_arr' id='$versions_option_name-ie8' value='8' $ie8_checked /> IE 8</label></li>
