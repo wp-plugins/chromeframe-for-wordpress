@@ -3,9 +3,9 @@
 /* 
 Plugin Name: ChromeFrame-For-Wordpress
 Plugin URI: http://sardiusgroup.com/chromeframe-for-wordpress
-Version: 0.2.003
+Version: 0.2.004
 Author: Andrew Janssen, for The Sardius Group LLC
-Description: Displays a ChromeFrame notice if the user is running IE6 or 7. Prompts the user to either upgrade to IE8, install ChromeFrame, or install another browser.
+Description: Displays a notice if the user is running IE6 or 7. Prompts the user to either upgrade to IE8, install ChromeFrame, or install another browser. Adds ChromeFrame support to the page.
 */
 
 $plugin_title = 'ChromeFrame-For-Wordpress';
@@ -18,14 +18,13 @@ $enabled_option_name = 'chromeframe-for-wordpress-enabled';
 $versions_option_name = 'chromeframe-for-wordpress-ie-versions';
 
 function cf_install() {
-	$default_message_html = "<p>Sorry, your browser is out of date and doesn't support<br/>modern Web pages like " . bloginfo('name') . '. ' .
+	$default_message_html = "<p>Sorry, your browser is out of date and doesn't support modern Web pages like " . bloginfo('blogname') . '. ' .
 	"Please <a href=\"http://www.microsoft.com/windows/internet-explorer/worldwide-sites.aspx\">upgrade</a> " .
-	"your browser to<br/>version 8 or install <a href=\"http://code.google.com/chrome/chromeframe/\">this browser enhancement</a> before continuing." .
+	"your browser to version 8 or install <a href=\"http://code.google.com/chrome/chromeframe/\">this browser enhancement</a> before continuing." .
 	" Thank you!</p><p><a href=\"http://www.mozilla.com/en-US/firefox/firefox.html\">Mozilla FireFox</a>, <a href=\"http://www.google.com/chrome\">Google Chrome</a>, <a href=\"http://www.opera.com/browser/\">Opera</a>," .
 	" and <a href=\"http://www.apple.com/safari/download/\">Apple Safari</a> are great options too.</p>";
 
 	add_option($html_option_name, $default_message_html);
-	add_option($enabled_option_name, true);
 	add_option($versions_option_name, array('5', '6', '7'));	
 }
 
@@ -35,24 +34,29 @@ function cf_uninstall() {
 	delete_option($versions_option_name);
 }
 
-function cf_header_content() {
-	global $enabled_option_name;
-	
-	if (get_option($enabled_option_name) == true) {
+function cf_header_content() {	
 	echo '<script type="text/javascript" src="' .
 		get_bloginfo('wpurl') . '/wp-content/plugins/chromeframe-for-wordpress/js/jquery-1.3.2.min.js" type="text/javascript"></script>';
+	echo '<script type="text/javascript">jQuery.noConflict();</script>';
 	echo '<script src="' .
 		get_bloginfo('wpurl') . '/wp-content/plugins/chromeframe-for-wordpress/js/boxy-0.1.4/src/javascripts/jquery.boxy.js" type="text/javascript"></script>';
+	echo '	<link rel="stylesheet" href="' .
+		get_bloginfo('wpurl') . '/wp-content/plugins/chromeframe-for-wordpress/css/boxy_overrides.css" />';
+	echo '<![endif]-->';
+		
+	echo '<!--[if IE 6]>';
+	echo '	<link rel="stylesheet" href="' .
+		get_bloginfo('wpurl') . '/wp-content/plugins/chromeframe-for-wordpress/js/boxy-0.1.4/src/stylesheets/boxy.ie6.css" />';
+	echo '<![endif]-->';
 
 	echo '<!--[if IE 7]>';
 	echo '	<link rel="stylesheet" href="' .
 		get_bloginfo('wpurl') . '/wp-content/plugins/chromeframe-for-wordpress/js/boxy-0.1.4/src/stylesheets/boxy.ie7.css" />';
 	echo '<![endif]-->';
-	}
 ?>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"> </script>
 <script>
-  $(document).ready(function() {
+  jQuery(document).ready(function() {
 	// From http://msdn.microsoft.com/en-us/library/ms537509(VS.85).aspx
 	// Returns the version of Internet Explorer or a -1
 	// (indicating the use of another browser).
@@ -89,12 +93,11 @@ function cf_header_content() {
 	    }
 		if (!ieAllowed) {
 			new Boxy(<?php
-echo '"' . str_replace('"', '\"', get_option('chromeframe-for-wordpress-message-html')) . '"';
+echo '"' . str_replace('"', '\"', get_option($html_option_name)) . '"';
 ?>, { title: "Browser Upgrade Required (Free)",
 				closeable: false,
 				modal: true
 			} );
-			// CFInstall.check({});
 		}
 	};
 	if (getInternetExplorerVersion() != -1) {
@@ -137,7 +140,7 @@ function cf_postbox($id, $title, $content) {
 }
 
 function cf_options_page() {
-	global $enabled_option_name, $versions_option_name, $html_option_name, $plugin_id;
+	global $versions_option_name, $html_option_name, $plugin_id;
 ?>
 	<div class="wrap">
 	<h2>ChromeFrame-For-WordPress</h2>
@@ -157,13 +160,6 @@ function cf_options_page() {
 								$ie8_checked = in_array('8', $versions) ? 'checked' : '';
 								$message_html = get_option($html_option_name);
 								$enabled_input_value = $enabled ? 'checked' : '';
-								
-								$rows[] = array(
-										'id' => 'chromeframe-for-wordpress-enabled',
-										'label' => 'Enable This Plugin',
-										'desc' => 'When enabled, this plugin forces users of Internet Explorer to either upgrade or to use a different browser.',
-										'content' => "<input type='checkbox' name='chromeframe-for-wordpress-enabled' id='chromeframe-for-wordpress-enabled' $enabled_input_value />"
-									);
 								
 								$rows[] = array(
 										'id' => 'chromeframe-for-wordpress-message-html',
@@ -226,6 +222,7 @@ function cf_add_action_link( $links, $file ) {
 add_action('wp_head', 'cf_header_content');
 add_action('admin_menu', 'cf_plugin_menu');
 add_filter('plugin_action_links', 'cf_add_action_link', 10, 2 );
+# TODO: in wp_content?, add a noscript block which floats above all other content.
 register_uninstall_hook(__FILE__, 'cf_install');
 register_uninstall_hook(__FILE__, 'cf_uninstall');
 ?>
