@@ -1,0 +1,11 @@
+table.boxy-wrapper div.title-bar > h2 {
+	font-size:14px;
+	padding-left:9px;
+	padding-top:3px;
+}
+
+.boxy-wrapper .boxy-content {
+	font-size:12px;
+	width:500px;
+	margin:0;
+}
