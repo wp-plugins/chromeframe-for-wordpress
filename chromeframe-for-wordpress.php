@@ -3,7 +3,7 @@
 /* 
 Plugin Name: ChromeFrame-For-Wordpress
 Plugin URI: http://sardiusgroup.com/chromeframe-for-wordpress
-Version: 0.2.005
+Version: 0.2.006
 Author: Andrew Janssen, for The Sardius Group LLC
 Description: Displays a notice if the user is running IE6 or 7. Prompts the user to either upgrade to IE8, install ChromeFrame, or install another browser. Adds ChromeFrame support to the page.
 */
@@ -129,7 +129,7 @@ echo '"' . str_replace('"', '\"', get_option($html_option_name)) . '"';
 	$ie_version = get_ie_version();
 	$versions = get_option($versions_option_name);
 	if (in_array("$ie_version", $versions)) {
-		echo '</head><body><noscript><table cellspacing="0" cellpadding="0" border="0" class="boxy-wrapper fixed" style="z-index: 1339; visibility: visible; left: 441.5px; top: 275.5px; opacity: 1;"><tbody><tr><td class="top-left"></td><td class="top"></td><td class="top-right"></td></tr><tr><td class="left"></td><td class="boxy-inner"><div class="title-bar"><h2>Browser Upgrade Required (Free)</h2></div><p>' . get_option($html_option_name) . '</p></td><td class="right"></td></tr><tr><td class="bottom-left"></td><td class="bottom"></td><td class="bottom-right"></td></tr></tbody></table><div class="boxy-modal-blackout" style="z-index: 1001; opacity: 0.7; width: 100%; height:100%;"></div></noscript></body>';
+		echo '</head><body><noscript><div class="noscript"><div class="boxy-modal-blackout"></div><table cellspacing="0" cellpadding="0" border="0" class="boxy-wrapper fixed" style="z-index: 1001; left: 100px; top: 100px; opacity:1;"><tbody><tr><td class="top-left"></td><td class="top"></td><td class="top-right"></td></tr><tr><td class="left"></td><td class="boxy-inner"><div class="title-bar"><h2>Browser Upgrade Required (Free)</h2></div><p>' . get_option($html_option_name) . '</p></td><td class="right"></td></tr><tr><td class="bottom-left"></td><td class="bottom"></td><td class="bottom-right"></td></tr></tbody></table></div></noscript></body>';
 	}
 }
 
