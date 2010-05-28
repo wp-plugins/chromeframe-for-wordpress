@@ -3,7 +3,7 @@
 /* 
 Plugin Name: ChromeFrame-For-Wordpress
 Plugin URI: http://sardiusgroup.com/chromeframe-for-wordpress
-Version: 0.2.004
+Version: 0.2.005
 Author: Andrew Janssen, for The Sardius Group LLC
 Description: Displays a notice if the user is running IE6 or 7. Prompts the user to either upgrade to IE8, install ChromeFrame, or install another browser. Adds ChromeFrame support to the page.
 */
@@ -34,24 +34,43 @@ function cf_uninstall() {
 	delete_option($versions_option_name);
 }
 
-function cf_header_content() {	
+function get_ie_version() {
+	$ua = $_SERVER['HTTP_USER_AGENT'];
+	if (preg_match('/\bmsie 6/i', $ua) && !preg_match('/\bopera/i', $ua)) {
+	 	return 6;
+	} elseif (preg_match('/\bmsie 7/i', $ua) && !preg_match('/\bopera/i', $ua)) {
+		return 7;
+	} elseif (preg_match('/\bmsie 8/i', $ua) && !preg_match('/\bopera/i', $ua)) {
+		return 8;
+	}
+	
+	return -1;
+}
+
+function cf_header_content() {
+	global $versions_option_name, $html_option_name;	
+		
 	echo '<script type="text/javascript" src="' .
 		get_bloginfo('wpurl') . '/wp-content/plugins/chromeframe-for-wordpress/js/jquery-1.3.2.min.js" type="text/javascript"></script>';
 	echo '<script type="text/javascript">jQuery.noConflict();</script>';
+
+	echo '<link rel="stylesheet" href="' .
+		get_bloginfo('wpurl') . '/wp-content/plugins/chromeframe-for-wordpress/js/boxy-0.1.4/src/stylesheets/boxy.css" />';
+
 	echo '<script src="' .
 		get_bloginfo('wpurl') . '/wp-content/plugins/chromeframe-for-wordpress/js/boxy-0.1.4/src/javascripts/jquery.boxy.js" type="text/javascript"></script>';
 	echo '	<link rel="stylesheet" href="' .
 		get_bloginfo('wpurl') . '/wp-content/plugins/chromeframe-for-wordpress/css/boxy_overrides.css" />';
 	echo '<![endif]-->';
-		
+			
 	echo '<!--[if IE 6]>';
 	echo '	<link rel="stylesheet" href="' .
-		get_bloginfo('wpurl') . '/wp-content/plugins/chromeframe-for-wordpress/js/boxy-0.1.4/src/stylesheets/boxy.ie6.css" />';
+		get_bloginfo('wpurl') . '/wp-content/plugins/chromeframe-for-wordpress/css/boxy.ie6.css" />';
 	echo '<![endif]-->';
 
 	echo '<!--[if IE 7]>';
 	echo '	<link rel="stylesheet" href="' .
-		get_bloginfo('wpurl') . '/wp-content/plugins/chromeframe-for-wordpress/js/boxy-0.1.4/src/stylesheets/boxy.ie7.css" />';
+		get_bloginfo('wpurl') . '/wp-content/plugins/chromeframe-for-wordpress/css/boxy.ie7.css" />';
 	echo '<![endif]-->';
 ?>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"> </script>
@@ -105,8 +124,13 @@ echo '"' . str_replace('"', '\"', get_option($html_option_name)) . '"';
 	}
 });
 </script>
-
 <?php
+
+	$ie_version = get_ie_version();
+	$versions = get_option($versions_option_name);
+	if (in_array("$ie_version", $versions)) {
+		echo '</head><body><noscript><table cellspacing="0" cellpadding="0" border="0" class="boxy-wrapper fixed" style="z-index: 1339; visibility: visible; left: 441.5px; top: 275.5px; opacity: 1;"><tbody><tr><td class="top-left"></td><td class="top"></td><td class="top-right"></td></tr><tr><td class="left"></td><td class="boxy-inner"><div class="title-bar"><h2>Browser Upgrade Required (Free)</h2></div><p>' . get_option($html_option_name) . '</p></td><td class="right"></td></tr><tr><td class="bottom-left"></td><td class="bottom"></td><td class="bottom-right"></td></tr></tbody></table><div class="boxy-modal-blackout" style="z-index: 1001; opacity: 0.7; width: 100%; height:100%;"></div></noscript></body>';
+	}
 }
 
 function cf_form_table($rows) {
